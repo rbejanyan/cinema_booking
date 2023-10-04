@@ -1,0 +1,23 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+
+<h1>Booking confirmation</h1>
+
+<table border="1">
+    <tr>
+        <th>Movie title</th>
+        <td>{{ booking.schedule.movie.name }}</td> <!-- Adjusted based on your model relationships -->
+    </tr>
+    <tr>
+        <th>Showtime</th>
+        <td>{{ booking.schedule.start_time }}</td> <!-- Adjusted based on your model relationships -->
+    </tr>
+    <tr>
+        <th>Seat Row and Number</th>
+        <td>Row: {{ booking.row_number }}, Seat: {{ booking.seat_number }}</td> <!-- Adjusted based on your model structure -->
+    </tr>
+    <!-- Removed reference number as it's not present in the model you provided -->
+</table>
+
+{% endblock %}

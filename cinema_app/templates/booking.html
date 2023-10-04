@@ -1,0 +1,41 @@
+{% load custom_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book {{ schedule.movie.name }}</title>
+</head>
+<body>
+    <h1>{{ schedule.movie.name }}</h1>
+    <img src="{{ schedule.movie.poster.url }}" alt="{{ schedule.movie.name }}" width="100">
+    <p>{{ schedule.movie.description }}</p>
+    <p>Show starts at: {{ schedule.start_time }}</p>
+    <p>Show ends at: {{ schedule.end_time }}</p>
+
+  <h2>Select Your Seats</h2>
+<form method="post" action="{% url 'booking' room.id schedule.id %}">
+    {% csrf_token %}
+    <div class="seats-grid">
+        {% for seat_data in all_seats %}
+            {% with row=seat_data.row seat_num=seat_data.seat seat_str=seat_data.seat_str %}
+                {% if seat_str in booked_seats %}
+                    <label>
+                        <input type="checkbox" name="seats" value="{{ seat_str }}" disabled>
+                        Row {{ row }} Seat {{ seat_num }} (Booked)
+                    </label>
+                {% else %}
+                    <label>
+                        <input type="checkbox" name="seats" value="{{ seat_str }}">
+                        Row {{ row }} Seat {{ seat_num }}
+                    </label>
+                {% endif %}
+            {% endwith %}
+        {% endfor %}
+    </div>
+
+    <input type="submit" value="Book Now">
+</form>
+</body>
+</html>

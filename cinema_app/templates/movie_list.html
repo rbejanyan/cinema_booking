@@ -1,0 +1,44 @@
+{% load static %}  <!-- This is important to use the 'static' tag in the template -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie List for Room: {{ room.name }}</title>
+    <!-- Include Bootstrap CSS for the grid system -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Movie List for Room: {{ room.name }}</h1>
+
+        <div class="row">
+            {% for movie_info in movie_data %}
+                <div class="col-md-4 mb-4"> <!-- This creates a 3-column grid -->
+                    {% if movie_info.movie.poster %}
+                        <img src="{{ movie_info.movie.poster.url }}" alt="{{ movie_info.movie.name }}" class="img-fluid mb-2">
+                    {% else %}
+                        <img src="{% static 'path/to/default-poster.jpg' %}" alt="Default poster" class="img-fluid mb-2">
+                    {% endif %}
+                    <h2>{{ movie_info.movie.name }}</h2>
+                    <p>Start Time: {{ movie_info.movie.start_time|date:"M. d, Y, P" }}</p>
+                    <p>End Time: {{ movie_info.movie.end_time|date:"M. d, Y, P" }}</p>
+                    <h3>Available Schedules:</h3>
+                    <ul>
+                        {% for schedule in movie_info.available_schedules %}
+                        <li>
+                            <a href="{% url 'booking' room_id=schedule.room.id schedule_id=schedule.id %}">
+                                Book Now for {{ schedule.start_time|date:"M. d, Y, P" }} - {{ schedule.end_time|date:"M. d, Y, P" }}
+                            </a>
+                        </li>
+                    {% empty %}
+                        <li>No available schedules.</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
